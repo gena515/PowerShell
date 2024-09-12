@@ -130,7 +130,7 @@ namespace Microsoft.PowerShell.Commands.Internal.Format
         /// <summary>
         /// Lock object.
         /// </summary>
-        private readonly object _syncRoot = new object();
+        private readonly System.Threading.Lock _syncRoot = new();
     }
 
     /// <summary>

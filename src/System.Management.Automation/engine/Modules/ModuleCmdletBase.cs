@@ -325,7 +325,7 @@ namespace Microsoft.PowerShell.Commands
         /// <summary>
         /// Synchronization object for creation/cleanup of WindowsPS compat remoting session.
         /// </summary>
-        internal static readonly object s_WindowsPowerShellCompatSyncObject = new object();
+        internal static readonly System.Threading.Lock s_WindowsPowerShellCompatSyncObject = new();
 
         private readonly Dictionary<string, PSModuleInfo> _currentlyProcessingModules = new Dictionary<string, PSModuleInfo>();
 
@@ -6222,7 +6222,7 @@ namespace Microsoft.PowerShell.Commands
             return shouldProcessModule;
         }
 
-        private static readonly object s_lockObject = new object();
+        private static readonly System.Threading.Lock s_lockObject = new();
 
         private static void ClearAnalysisCaches()
         {

@@ -614,7 +614,7 @@ namespace System.Management.Automation.Runspaces
         /// 3) Attempt is made to invoke a nested pipeline directly. Nested
         /// pipeline must be invoked from a running pipeline.
         /// </exception>
-        internal void DoConcurrentCheck(bool syncCall, object syncObject, bool isInLock)
+        internal void DoConcurrentCheck(bool syncCall, Lock syncObject, bool isInLock)
         {
             PipelineBase currentPipeline = (PipelineBase)RunspaceBase.GetCurrentlyRunningPipeline();
 
@@ -636,7 +636,7 @@ namespace System.Management.Automation.Runspaces
                         {
                             // If the method is invoked in the lock statement, release the
                             // lock before wait on the pulse pipeline
-                            Monitor.Exit(syncObject);
+                            syncObject.Exit();
                         }
 
                         try
@@ -649,7 +649,7 @@ namespace System.Management.Automation.Runspaces
                             {
                                 // If the method is invoked in the lock statement, acquire the
                                 // lock before we carry on with the rest operations
-                                Monitor.Enter(syncObject);
+                                syncObject.Enter();
                             }
                         }
 
@@ -1025,7 +1025,7 @@ namespace System.Management.Automation.Runspaces
         /// <summary>
         /// Object used for synchronization.
         /// </summary>
-        protected internal object SyncRoot { get; } = new object();
+        protected internal Lock SyncRoot { get; } = new();
 
         #endregion misc
 

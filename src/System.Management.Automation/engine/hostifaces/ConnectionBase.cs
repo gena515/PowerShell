@@ -199,7 +199,7 @@ namespace System.Management.Automation.Runspaces
         /// <summary>
         /// Object used for synchronization.
         /// </summary>
-        protected internal object SyncRoot { get; } = new object();
+        protected internal Lock SyncRoot { get; } = new();
 
         /// <summary>
         /// Information about the computer where this runspace is created.
@@ -377,7 +377,7 @@ namespace System.Management.Automation.Runspaces
                 {
                     // Wait till the runspace is opened - This is set in DoOpenHelper()
                     // Release the lock before we wait
-                    Monitor.Exit(SyncRoot);
+                    SyncRoot.Exit();
                     try
                     {
                         RunspaceOpening.Wait();
@@ -385,7 +385,7 @@ namespace System.Management.Automation.Runspaces
                     finally
                     {
                         // Acquire the lock before we carry on with the rest operations
-                        Monitor.Enter(SyncRoot);
+                        SyncRoot.Enter();
                     }
                 }
 
@@ -833,7 +833,7 @@ namespace System.Management.Automation.Runspaces
         /// </summary>
         protected bool ByPassRunspaceStateCheck { get; set; }
 
-        private readonly object _pipelineListLock = new object();
+        private readonly Lock _pipelineListLock = new();
 
         /// <summary>
         /// List of pipeline which are currently executing in this runspace.
@@ -1196,7 +1196,7 @@ namespace System.Management.Automation.Runspaces
                     {
                         // If so, wait and try again
                         // Release the lock before we wait for the pulse pipelines
-                        Monitor.Exit(SyncRoot);
+                        SyncRoot.Exit();
 
                         try
                         {
@@ -1205,7 +1205,7 @@ namespace System.Management.Automation.Runspaces
                         finally
                         {
                             // Acquire the lock before we carry on with the rest operations
-                            Monitor.Enter(SyncRoot);
+                            SyncRoot.Enter();
                         }
 
                         DoConcurrentCheckAndMarkSessionStateProxyCallInProgress();

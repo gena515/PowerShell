@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Management.Automation;
 using System.Reflection;
 using System.Reflection.Emit;
-
+using System.Threading;
 using Microsoft.PowerShell.Cmdletization.Xml;
 
 namespace Microsoft.PowerShell.Cmdletization
@@ -24,7 +24,7 @@ namespace Microsoft.PowerShell.Cmdletization
         }
 
         private static readonly Lazy<ModuleBuilder> s_moduleBuilder = new(CreateModuleBuilder, isThreadSafe: true);
-        private static readonly object s_moduleBuilderUsageLock = new();
+        private static readonly Lock s_moduleBuilderUsageLock = new();
 
         internal static string GetEnumFullName(EnumMetadataEnum enumMetadata)
         {

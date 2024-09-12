@@ -62,7 +62,7 @@ namespace System.Management.Automation
         /// <summary>
         /// Object that will be used for thread synchronization.
         /// </summary>
-        private readonly object _syncobject = new object();
+        private readonly Lock _syncobject = new();
 
         private const int StartJobOperation = 1;
         private const int StopJobOperation = 2;
@@ -116,7 +116,7 @@ namespace System.Management.Automation
 
         /// <summary>
         /// </summary>
-        protected object SyncRoot
+        protected Lock SyncRoot
         {
             get { return syncObject; }
         }
@@ -500,7 +500,7 @@ namespace System.Management.Automation
         private const string TraceClassName = "ContainerParentJob";
 
         private bool _moreData = true;
-        private readonly object _syncObject = new object();
+        private readonly Lock _syncObject = new();
         private int _isDisposed = 0;
 
         private const int DisposedTrue = 1;
